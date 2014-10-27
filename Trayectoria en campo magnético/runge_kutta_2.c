@@ -24,7 +24,7 @@ int main(int argc, char **argv){
   double dt = 100.0/points;
 
   char filename[50];
-  sprintf(filename, "trayectoria_%f_%f_runge_kutta.dat",KE,alpha);
+  sprintf(filename, "trayectoria_%f_%f_runge_kutta_2.dat",KE,alpha);
   FILE *out= fopen(filename,"w");
   fprintf(out,"%f %f %f %f\n",t,x,y,z);
   t=t+dt;
@@ -64,55 +64,28 @@ double vz_prime(double x,double y,double z,double vx,double vy,double vz,double 
 }
 
 void make_step(double *x,double *y,double  *z,double *vx,double *vy,double *vz,double *x_old,double  *y_old,double *z_old,double *vx_old,double *vy_old,double  *vz_old,double *t,double  dt, double v0){
-
+  
   double ax1 = vx_prime(*x_old,*y_old,*z_old,*vx_old,*vy_old,*vz_old,v0);
   double ay1 = vy_prime(*x_old,*y_old,*z_old,*vx_old,*vy_old,*vz_old,v0);
   double az1 = vz_prime(*x_old,*y_old,*z_old,*vx_old,*vy_old,*vz_old,v0);
+  
+  double vx_half = *vx_old+dt/2.0*ax1;
+  double vy_half = *vy_old+dt/2.0*ay1;
+  double vz_half = *vz_old+dt/2.0*az1;
+  double x_half = *x_old+dt/2.0*(*vx_old);
+  double y_half = *y_old+dt/2.0*(*vy_old);
+  double z_half = *z_old+dt/2.0*(*vy_old);
 
-  double vx1 = *vx_old+dt/2.0*ax1;
-  double vy1 = *vy_old+dt/2.0*ay1;
-  double vz1 = *vz_old+dt/2.0*az1;
-  double x1 = *x_old+dt/2.0*vx1;
-  double y1 = *y_old+dt/2.0*vy1;
-  double z1 = *z_old+dt/2.0*vz1;
-  double ax2 = vx_prime(x1,y1,z1,vx1,vy1,vz1,v0);
-  double ay2 = vy_prime(x1,y1,z1,vx1,vy1,vz1,v0); 
-  double az2 = vz_prime(x1,y1,z1,vx1,vy1,vz1,v0);
+  double ax_half = vx_prime(x_half,y_half,z_half,vx_half,vy_half,vz_half,v0);
+  double ay_half = vy_prime(x_half,y_half,z_half,vx_half,vy_half,vz_half,v0);
+  double az_half = vz_prime(x_half,y_half,z_half,vx_half,vy_half,vz_half,v0);
 
-  double vx2 = *vx_old+dt/2.0*ax2;
-  double vy2 = *vy_old+dt/2.0*ay2;
-  double vz2 = *vz_old+dt/2.0*az2;
-  double x2 = *x_old+dt/2.0*vx2;
-  double y2 = *y_old+dt/2.0*vy2;
-  double z2 = *z_old+dt/2.0*vz2;
-  double ax3 = vx_prime(x2,y2,z2,vx2,vy2,vz2,v0);
-  double ay3 = vy_prime(x2,y2,z2,vx2,vy2,vz2,v0);
-  double az3 = vz_prime(x2,y2,z2,vx2,vy2,vz2,v0);
-
-  double vx3 = *vx_old+dt*ax3;
-  double vy3 = *vy_old+dt*ay3;
-  double vz3 = *vz_old+dt*az3;
-  double x3 = *x_old+dt*vx3;
-  double y3 = *y_old+dt*vy3;
-  double z3 = *z_old+dt*vz3;
-  double ax4 = vx_prime(x3,y3,z3,vx3,vy3,vz3,v0);
-  double ay4 = vy_prime(x3,y3,z3,vx3,vy3,vz3,v0);
-  double az4 = vz_prime(x3,y3,z3,vx3,vy3,vz3,v0);
-
-  double ax=1.0/6.0*(ax1+2.0*ax2+2.0*ax3+ax4);
-  double ay=1.0/6.0*(ay1+2.0*ay2+2.0*ay3+ay4);
-  double az=1.0/6.0*(az1+2.0*az2+2.0*az3+az4);
-
-  double new_vx = 1.0/6.0* (*vx + 2.0*vx1+ 2.0*vx2 +vx3);
-  double new_vy = 1.0/6.0* (*vx + 2.0*vx1+ 2.0*vx2 +vx3);
-  double new_vz = 1.0/6.0* (*vx + 2.0*vx1+ 2.0*vx2 +vx3);
-
-  *y= *y_old + new_vy*dt;
-  *x= *x_old + new_vx*dt;
-  *z=*z_old+new_vz*dt;
-  *vx=*vx_old+ax*dt;
-  *vy=*vy_old+ay*dt;
-  *vz=*vz_old+az*dt;
+  *x=*x_old + vx_half*dt;
+  *y=*y_old + vy_half*dt;
+  *z=*z_old + vz_half*dt;
+  *vx = *vx_old + ax_half*dt;
+  *vy = *vy_old + ay_half*dt;
+  *vz = *vz_old + az_half*dt;
 
   *x_old = *x;
   *y_old = *y;
