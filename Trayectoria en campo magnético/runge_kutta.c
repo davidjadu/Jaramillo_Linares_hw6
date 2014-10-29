@@ -13,7 +13,7 @@ double vz_prime(double x,double y,double z,double vx,double vy,double vz,double 
 void make_step(double *x,double *y,double  *z,double *vx,double *vy,double *vz,double *x_old,double  *y_old,double *z_old,double *vx_old,double *vy_old,double  *vz_old,double *t,double  dt, double v0);
 
 int main(int argc, char **argv){
-  int points =10000;
+  int points =1E7;
   double KE = atof(argv[1]); // KE is MeV
   double alpha = atof(argv[2])*M_PI/180; // alpha is given in degrees
   double x=2*Rt,y=0,z=0;
