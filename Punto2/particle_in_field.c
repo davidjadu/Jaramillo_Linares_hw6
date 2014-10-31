@@ -3,7 +3,7 @@
 #include<math.h>
 
 float qB0_m = 2874; // qB0/m [1/s]
-float c = 47; // m/s^2
+float c = 47; // Rt/s
 float m = 938.272; // MeV/c^2
 
 void make_step(float *r, float *v, float *r_old, float *v_old, float *t, float dt);
