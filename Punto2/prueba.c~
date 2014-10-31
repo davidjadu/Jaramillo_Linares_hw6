@@ -1,0 +1,23 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+
+
+float *scalar_mult(float lambda, float *a);
+
+int main(){
+  float a[3];
+  a[0]=1, a[1]=1, a[2]=0;
+  float lambda = 3;
+  printf("result = %f", scalar_mult(lambda,a))
+  return 0;
+}
+
+
+float *scalar_mult(float lambda, float *a){
+  float *new = malloc(3*sizeof(float));
+  int i;
+  for(i=0; i<3; i++)
+    new[i]=lambda*a[i];
+  return new;
+}
